@@ -2,36 +2,84 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Резюме - Назар Качмар</title>
+    <title>Лабораторна робота №4</title>
+    <style>
+        body { font-family: sans-serif; transition: background-color 0.3s, color 0.3s; }
+        /* CSS класи для тем */
+        body.dark-mode { background-color: #333; color: #f4f4f4; }
+        .modal { display: none; position: fixed; top: 20%; left: 50%; transform: translate(-50%, 0); border: 1px solid #ccc; padding: 20px; background-color: inherit; z-index: 1000; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .review-card { border: 1px solid #ddd; margin-bottom: 10px; padding: 10px; border-radius: 5px; }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Назар Качмар</h1>
-        <p>Студент спеціальності "Кібербезпека" | Програміст (Python, C#)</p>
-        <p>Контакт: <a href="mailto:nazar@gmail.com">nazar@gmail.com</a></p>
-    </header>
+    <button id="themeToggle">Перемкнути тему</button>
+    
+    <h2>Відгуки:</h2>
+    <div id="reviewsContainer"></div>
 
-    <main>
-        <section>
-            <h2>Технічні навички та проєкти</h2>
-            <ul>
-                <li><strong>Python:</strong> розробка скриптів, аналіз JSON-логів, реалізація алгоритмів.</li>
-                <li><strong>C#:</strong> об'єктно-орієнтоване програмування, створення додатків на Windows Forms (кастомний веббраузер).</li>
-                <li><strong>Кібербезпека:</strong> аналіз ризиків інформаційної безпеки, робота зі стандартами ISO/IEC 27001 та ISO 27005.</li>
-                <li><strong>Мережі:</strong> конфігурація бездротових мереж та автентифікації RADIUS у Cisco Packet Tracer.</li>
-            </ul>
-        </section>
+    <!-- Модальне вікно форми -->
+    <div id="feedbackModal" class="modal">
+        <h3>Зворотний зв'язок</h3>
+        <form action="https://formspree.io/f/mqpeodgp" method="POST">
+            <input type="text" name="name" placeholder="Ім'я" required><br><br>
+            <input type="email" name="email" placeholder="Email" required><br><br>
+            <input type="tel" name="phone" placeholder="Номер телефону"><br><br>
+            <textarea name="message" placeholder="Ваше повідомлення" required></textarea><br><br>
+            <button type="submit">Надіслати</button>
+            <button type="button" id="closeModal">Закрити</button>
+        </form>
+    </div>
 
-        <section>
-            <h2>Освіта</h2>
-            <p>Національний університет «Львівська політехніка»</p>
-            <p>Спеціальність: Кібербезпека</p>
-        </section>
-    </main>
+    <footer id="siteFooter" style="margin-top: 50px; border-top: 1px solid #ccc; padding-top: 10px;"></footer>
 
-    <footer>
-        <p>&copy; 2026 Назар Качмар</p>
-    </footer>
+    <script>
+        // 1. LocalStorage: Збереження та відображення даних ОС та браузера
+        localStorage.setItem('os_info', navigator.platform);
+        localStorage.setItem('browser_info', navigator.userAgent);
+        
+        document.getElementById('siteFooter').innerHTML = `
+            <p>ОС: ${localStorage.getItem('os_info')}</p>
+            <p>Браузер: ${localStorage.getItem('browser_info')}</p>
+        `;
+
+        // 2. Асинхронний JavaScript (Fetch API)
+        fetch('https://jsonplaceholder.typicode.com/posts/9/comments')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('reviewsContainer');
+                data.forEach(comment => {
+                    const div = document.createElement('div');
+                    div.className = 'review-card';
+                    div.innerHTML = `<strong>${comment.name}</strong> (${comment.email})<br><p>${comment.body}</p>`;
+                    container.appendChild(div);
+                });
+            })
+            .catch(error => console.error('Помилка завантаження:', error));
+
+        // 3. Слухачі подій та Таймери: Модальне вікно через 1 хвилину (60000 мс)
+        setTimeout(() => {
+            document.getElementById('feedbackModal').style.display = 'block';
+        }, 60000);
+
+        document.getElementById('closeModal').addEventListener('click', () => {
+            document.getElementById('feedbackModal').style.display = 'none';
+        });
+
+        // 4. Дата та Час: Перемикач теми
+        const applyTheme = () => {
+            const hour = new Date().getHours();
+            if (hour >= 7 && hour < 21) {
+                document.body.classList.remove('dark-mode');
+            } else {
+                document.body.classList.add('dark-mode');
+            }
+        };
+        
+        applyTheme(); // Перевірка при завантаженні сторінки
+
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
 </body>
 </html>

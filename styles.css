@@ -1,0 +1,57 @@
+/* Керування Box Model (box-sizing, margin, padding) */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Селектор тегу */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f9fafb;
+    padding: 20px;
+}
+
+/* Селектор ID */
+#main-name {
+    font-size: 2.5rem;
+    color: #1e3a8a;
+}
+
+/* Макет Flexbox для контейнера */
+.cv-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Селектор класу та керування border/padding */
+.cv-section {
+    background-color: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1; /* Елементи будуть займати однакову ширину */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Селектор атрибута та псевдокласи (:hover, :focus) */
+a[target="_blank"] {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+a[target="_blank"]:hover,
+a[target="_blank"]:focus {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* Медіазапит для вузьких екранів */
+@media (max-width: 768px) {
+    .cv-container {
+        flex-direction: column; /* Змінює горизонтальне розташування на вертикальне */
+    }
+}
